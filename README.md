@@ -1,5 +1,4 @@
 # UniConnect
-<<<<<<< HEAD
 This application was generated using JHipster 4.1.1, you can find documentation and help at [https://jhipster.github.io/documentation-archive/v4.1.1](https://jhipster.github.io/documentation-archive/v4.1.1).
 
 ## Development
@@ -111,6 +110,3 @@ To configure CI for your project, run the ci-cd sub-generator (`yo jhipster:ci-c
 [Protractor]: https://angular.github.io/protractor/
 [Leaflet]: http://leafletjs.com/
 [DefinitelyTyped]: http://definitelytyped.org/
-=======
-UniConnect is a system where university students can share things among their colleges, find opportunities and ask questions from senior and from the industry.
->>>>>>> 0793048dcf1fe90059adee0ce046f7aede06d251
