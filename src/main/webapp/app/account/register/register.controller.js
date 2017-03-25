@@ -19,6 +19,9 @@
         vm.registerAccount = {};
         vm.success = null;
 
+        // For adding user type (Default is taken as ROLE_USER)
+        vm.registerAccount.authorities = ["ROLE_USER",];
+
         $timeout(function (){angular.element('#login').focus();});
 
         function register () {
