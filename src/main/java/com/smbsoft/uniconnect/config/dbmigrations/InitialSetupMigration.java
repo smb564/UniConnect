@@ -24,8 +24,14 @@ public class InitialSetupMigration {
         adminAuthority.setName(AuthoritiesConstants.ADMIN);
         Authority userAuthority = new Authority();
         userAuthority.setName(AuthoritiesConstants.USER);
+
+        // Add new company Authority
+        Authority companyAuthority = new Authority();
+        companyAuthority.setName(AuthoritiesConstants.COMPANY);
+
         mongoTemplate.save(adminAuthority);
         mongoTemplate.save(userAuthority);
+        mongoTemplate.save(companyAuthority);
     }
 
     @ChangeSet(order = "02", author = "initiator", id = "02-addUsers")
