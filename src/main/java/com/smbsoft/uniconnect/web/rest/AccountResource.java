@@ -6,6 +6,7 @@ import com.smbsoft.uniconnect.domain.PersistentToken;
 import com.smbsoft.uniconnect.domain.User;
 import com.smbsoft.uniconnect.repository.PersistentTokenRepository;
 import com.smbsoft.uniconnect.repository.UserRepository;
+import com.smbsoft.uniconnect.security.AuthoritiesConstants;
 import com.smbsoft.uniconnect.security.SecurityUtils;
 import com.smbsoft.uniconnect.service.MailService;
 import com.smbsoft.uniconnect.service.UserService;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sun.net.www.protocol.http.AuthenticationInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -69,6 +71,23 @@ public class AccountResource {
         HttpHeaders textPlainHeaders = new HttpHeaders();
         textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
 
+        // Get the authority
+        String authority;
+        Iterator<String> iter = managedUserVM.getAuthorities().iterator();
+
+        // Only one authority possible AND IT CANNOT BE ADMIN (Users are not allowed to create admin accounts)
+        if(iter.hasNext()){
+            if (iter.next().equals(AuthoritiesConstants.COMPANY)){
+                authority = AuthoritiesConstants.COMPANY;
+            }else{
+                // if the type is not company, set it to user. (don't allow admin accounts to be created)
+                authority = AuthoritiesConstants.USER;
+            }
+        }else{
+            // Default is set to ROLE_USER
+            authority = AuthoritiesConstants.USER;
+        }
+
         return userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase())
             .map(user -> new ResponseEntity<>("login already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
             .orElseGet(() -> userRepository.findOneByEmail(managedUserVM.getEmail())
@@ -77,7 +96,8 @@ public class AccountResource {
                     User user = userService
                         .createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
                             managedUserVM.getFirstName(), managedUserVM.getLastName(),
-                            managedUserVM.getEmail().toLowerCase(), managedUserVM.getImageUrl(), managedUserVM.getLangKey());
+                            managedUserVM.getEmail().toLowerCase(), managedUserVM.getImageUrl(), managedUserVM.getLangKey(),
+                            authority);
 
                     mailService.sendActivationEmail(user);
                     return new ResponseEntity<>(HttpStatus.CREATED);

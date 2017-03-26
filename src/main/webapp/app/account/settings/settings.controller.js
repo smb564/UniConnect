@@ -5,15 +5,57 @@
         .module('uniConnectApp')
         .controller('SettingsController', SettingsController);
 
-    SettingsController.$inject = ['Principal', 'Auth'];
+    SettingsController.$inject = ['Principal', 'Auth', 'StudentUser', 'INTEREST_FIELDS'];
 
-    function SettingsController (Principal, Auth) {
+    function SettingsController (Principal, Auth, StudentUser, INTEREST_FIELDS) {
         var vm = this;
+
+        // Getting the user type
+        vm.isAdmin = false;
+        vm.isCompany = false;
+        vm.isUser = false;
+
+        Principal.hasAuthority("ROLE_COMPANY").then(function(data){
+            vm.isCompany = data;
+        });
+
+        Principal.hasAuthority("ROLE_USER").then(function(data){
+            vm.isUser = data;
+        });
+
+        Principal.hasAuthority("ROLE_ADMIN").then(function(data){
+            vm.isAdmin = data;
+        });
+
+        // Interests should be one of the following (Loaded from constants)
+        vm.interests = INTEREST_FIELDS;
 
         vm.error = null;
         vm.save = save;
         vm.settingsAccount = null;
         vm.success = null;
+        vm.saveProfile = saveProfile;
+        vm.studentUser = {};
+
+        // Get the current user profile (if available and update the fields accordingly)
+        if (vm.isUser && !vm.isAdmin){
+            StudentUser.getForCurrentUser(onStudentUserLoadSuccess, onError);
+        }
+
+        if (vm.isCompany && !vm.isAdmin){
+            // Get the company data
+        }
+
+        function onStudentUserLoadSuccess(data){
+            vm.studentUser.currentSemester = data.currentSemester;
+            vm.studentUser.interests = data.interests;
+            vm.studentUser.graduateYear = data.graduateYear;
+            vm.studentUser.graduate = data.graduate;
+        }
+
+        function onError(err){
+            console.log("Fetching data form the server failed : " + err);
+        }
 
         /**
          * Store the "settings account" in a separate variable, and not in the shared "account" variable.
@@ -44,6 +86,27 @@
                 vm.success = null;
                 vm.error = 'ERROR';
             });
+        }
+
+        function saveProfile(){
+            vm.isSaving = true;
+            if (vm.studentUser.id !== null) {
+                StudentUser.update(vm.studentUser, onSaveSuccess, onSaveError);
+            } else {
+                StudentUser.save(vm.studentUser, onSaveSuccess, onSaveError);
+            }
+        }
+
+        function onSaveSuccess(){
+            vm.isSaving = false;
+            vm.error = null;
+            vm.success = "OK";
+        }
+
+        function onSaveError(){
+            vm.isSaving = false;
+            vm.success = null;
+            vm.error = "ERROR";
         }
     }
 })();

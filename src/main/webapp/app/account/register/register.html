@@ -112,12 +112,21 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="control-label" for="studentUser">Select User Type</label>
+                    <br>
+                    <label class="radio-inline">
+                        <input type="radio" name="userRoleOptions" id="studentUser" ng-model="vm.registerAccount.authorities[0]" value="ROLE_USER"> Student User
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="userRoleOptions" id="companyUser" ng-model="vm.registerAccount.authorities[0]" value="ROLE_COMPANY"> Company Representative User
+                    </label>
+                </div>
+
+                {{registerAccount}}
+
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Register</button>
             </form>
-            <p></p>
-            <div class="alert alert-warning">
-                If you want to <a class="alert-link" href="" ng-click="vm.login()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
-            </div>
         </div>
     </div>
 </div>
