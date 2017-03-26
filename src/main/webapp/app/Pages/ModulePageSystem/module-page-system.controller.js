@@ -5,12 +5,22 @@
         .module('uniConnectApp')
         .controller("ModuleSystemController", ModuleSystemController);
 
-    ModuleSystemController.$inject = [];
+    ModuleSystemController.$inject = ['ModulePage','AlertService'];
 
-    function ModuleSystemController(){
+    function ModuleSystemController(ModulePage, AlertService){
         var vm = this;
+        vm.modules = [];
 
-        vm.test = "hello from the controller";
+        ModulePage.query(onSuccess, onError);
+
+        function onSuccess(data, headers){
+            vm.modules = data;
+        }
+
+        function onError(err){
+            AlertService.error(err.data.message);
+        }
+
     }
 
 })();
