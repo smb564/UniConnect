@@ -13,7 +13,7 @@ describe('Controller Tests', function() {
             MockEntity = jasmine.createSpy('MockEntity');
             MockPreviousState = jasmine.createSpy('MockPreviousState');
             MockStudent_user = jasmine.createSpy('MockStudent_user');
-            
+
 
             var locals = {
                 '$scope': $scope,
@@ -23,7 +23,7 @@ describe('Controller Tests', function() {
                 'Student_user': MockStudent_user
             };
             createController = function() {
-                $injector.get('$controller')("Student_userDetailController", locals);
+                $injector.get('$controller')("StudentUserDetailController", locals);
             };
         }));
 

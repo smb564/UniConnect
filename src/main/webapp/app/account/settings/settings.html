@@ -51,7 +51,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="email">E-mail</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Your e-mail"
+                    <input type="email" class="form-control" readonly id="email" name="email" placeholder="Your e-mail"
                            ng-model="vm.settingsAccount.email" ng-minlength=5 ng-maxlength=100 required maxlength="100">
                     <div ng-show="form.email.$dirty && form.email.$invalid">
                         <p class="help-block"
@@ -77,5 +77,68 @@
             </form>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <hr />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h4 id="myStudentUserLabel" data-translate="uniConnectApp.student_user.home.createOrEditLabel">Update Your Profile</h4>
+
+            <form name="editForm" role="form" novalidate ng-submit="vm.saveProfile()" show-validation>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" ng-show="vm.studentUser.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                           ng-model="vm.studentUser.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" data-translate="uniConnectApp.student_user.graduate" for="field_graduate">Graduate</label>
+                    <input type="checkbox" name="graduate" id="field_graduate"
+                           ng-model="vm.studentUser.graduate"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" data-translate="uniConnectApp.student_user.graduateYear" for="field_graduate_year">Graduate Year</label>
+                    <input type="number" class="form-control" name="graduateYear" id="field_graduate_year"
+                           ng-model="vm.studentUser.graduateYear"
+                    />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" data-translate="uniConnectApp.student_user.currentSemester" for="field_current_semester">Current Semester</label>
+                    <input type="number" class="form-control" name="currentSemester" id="field_current_semester"
+                           ng-model="vm.studentUser.currentSemester"
+                           min="0" max="8"/>
+                    <div ng-show="editForm.currentSemester.$invalid">
+                        <p class="help-block"
+                           ng-show="editForm.currentSemester.$error.min" translate-value-min="0">
+                            This field should be at least 0.
+                        </p>
+                        <p class="help-block"
+                           ng-show="editForm.currentSemester.$error.max">
+                            This field cannot be more than 8.
+                        </p>
+                        <p class="help-block"
+                           ng-show="editForm.currentSemester.$error.number">
+                            This field should be a number.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    
+                </div>
+
+                <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+
 
 </div>
