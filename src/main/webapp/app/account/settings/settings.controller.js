@@ -10,6 +10,23 @@
     function SettingsController (Principal, Auth, StudentUser, INTEREST_FIELDS) {
         var vm = this;
 
+        // Getting the user type
+        vm.isAdmin = false;
+        vm.isCompany = false;
+        vm.isUser = false;
+
+        Principal.hasAuthority("ROLE_COMPANY").then(function(data){
+            vm.isCompany = data;
+        });
+
+        Principal.hasAuthority("ROLE_USER").then(function(data){
+            vm.isUser = data;
+        });
+
+        Principal.hasAuthority("ROLE_ADMIN").then(function(data){
+            vm.isAdmin = data;
+        });
+
         // Interests should be one of the following (Loaded from constants)
         vm.interests = INTEREST_FIELDS;
 
@@ -20,8 +37,14 @@
         vm.saveProfile = saveProfile;
         vm.studentUser = {};
 
-        // Get the current user profile (if available and update the fields accordingly) TODO-Based on the type of user this should change
-        StudentUser.getForCurrentUser(onStudentUserLoadSuccess, onError);
+        // Get the current user profile (if available and update the fields accordingly)
+        if (vm.isUser && !vm.isAdmin){
+            StudentUser.getForCurrentUser(onStudentUserLoadSuccess, onError);
+        }
+
+        if (vm.isCompany && !vm.isAdmin){
+            // Get the company data
+        }
 
         function onStudentUserLoadSuccess(data){
             vm.studentUser.currentSemester = data.currentSemester;
