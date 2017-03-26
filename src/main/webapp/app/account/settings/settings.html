@@ -149,6 +149,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="control-label" for="departmentSelect">Department</label>
+                    <select class="form-control" name="department" id="departmentSelect" ng-model="vm.studentUser.department" ng-options="dep for dep in vm.departments"></select>
+                </div>
+
+                <div class="form-group">
                     <ui-select multiple ng-model="vm.studentUser.interests" theme="bootstrap"  close-on-select="false" title="Choose Interests">
                         <ui-select-match placeholder="Select Interests">{{$item}}</ui-select-match>
                         <ui-select-choices repeat="interest in vm.interests | filter:$select.search">

@@ -7,5 +7,8 @@
         .constant('DEBUG_INFO_ENABLED', true)
         .constant('INTEREST_FIELDS', ['Science', 'Engineering', 'Planes', 'Mathematics','Programming',
                                         'Winodows', 'Education', 'Health', 'Fitness'])
+        .constant('DEPARTMENTS', ['Computer Science and Engineering', 'Electronic and Telecommunication',
+                                    'Biomedical Engineering', 'Chemical Engineering', 'Electrical Engineering',
+                                    'Civil Engineering', 'Materials Engineering'])
 ;
 })();
