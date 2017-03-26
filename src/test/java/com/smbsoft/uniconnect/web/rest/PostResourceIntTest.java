@@ -231,8 +231,7 @@ public class PostResourceIntTest {
             .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .date(UPDATED_DATE)
-            .votes(UPDATED_VOTES)
-            .ownerLogin(UPDATED_OWNER_LOGIN);
+            .votes(UPDATED_VOTES);
 
         restPostMockMvc.perform(put("/api/posts")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -245,9 +244,6 @@ public class PostResourceIntTest {
         Post testPost = postList.get(postList.size() - 1);
         assertThat(testPost.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testPost.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testPost.getDate()).isEqualTo(UPDATED_DATE);
-        assertThat(testPost.getVotes()).isEqualTo(UPDATED_VOTES);
-        assertThat(testPost.getOwnerLogin()).isEqualTo(UPDATED_OWNER_LOGIN);
     }
 
     @Test
