@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -33,24 +34,24 @@ public class ModulePage implements Serializable {
     private String moduleCode;
 
     @Field("targets")
-    private String[][] targets;
+    private List<List<String>> targets;
 
     @Field("posts")
-    private String[] posts;
+    private List<String> posts;
 
-    public String[][] getTargets() {
+    public List<List<String>> getTargets() {
         return targets;
     }
 
-    public void setTargets(String[][] targets) {
+    public void setTargets(List<List<String>> targets) {
         this.targets = targets;
     }
 
-    public String[] getPosts() {
+    public List<String> getPosts() {
         return posts;
     }
 
-    public void setPosts(String[] posts) {
+    public void setPosts(List<String> posts) {
         this.posts = posts;
     }
 
