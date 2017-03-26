@@ -53,6 +53,8 @@ public class StudentUserResourceIntTest {
     private static final String[] DEFAULT_INTEREST = {"interest1", "interest2"};
     private static final String[] UPDATED_INTEREST = {"interest1", "interest2", "interest3"};
 
+    private static final String DEFAULT_USER_ID = "user-3";
+
     @Autowired
     private StudentUserRepository studentUserRepository;
 
@@ -93,7 +95,8 @@ public class StudentUserResourceIntTest {
             .graduate(DEFAULT_GRADUATE)
             .graduateYear(DEFAULT_GRADUATE_YEAR)
             .currentSemester(DEFAULT_CURRENT_SEMESTER)
-            .interests(DEFAULT_INTEREST);
+            .interests(DEFAULT_INTEREST)
+            .userID(DEFAULT_USER_ID);
         return studentUser;
     }
 

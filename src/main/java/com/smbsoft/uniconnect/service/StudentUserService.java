@@ -30,7 +30,6 @@ public class StudentUserService {
      */
     public StudentUser save(StudentUser studentUser) {
         log.debug("Request to save StudentUser : {}", studentUser);
-        System.out.println(studentUser);
         StudentUser result = studentUserRepository.save(studentUser);
         return result;
     }

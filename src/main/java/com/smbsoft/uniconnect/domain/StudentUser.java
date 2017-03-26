@@ -39,6 +39,23 @@ public class StudentUser implements Serializable {
     @Field("interests")
     private String[] interests;
 
+    // Mapping to the user
+    @Field("user_id")
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public StudentUser userID(String userId){
+        this.userId = userId;
+        return this;
+    }
+
     public String[] getInterests() {
         return interests;
     }
