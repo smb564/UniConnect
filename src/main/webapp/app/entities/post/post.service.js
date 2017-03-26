@@ -36,6 +36,18 @@
                     copy.date = DateUtils.convertLocalDateToServer(copy.date);
                     return angular.toJson(copy);
                 }
+            },
+            'getModule': {
+                method: "GET",
+                isArray: true,
+                url: 'api/posts/module/:module',
+                transformResponse: function (data) {
+                    if (data){
+                        data = angular.fromJson(data);
+                        data.date = DateUtils.convertLocalDateFromServer(data.date);
+                    }
+                    return data;
+                }
             }
         });
     }

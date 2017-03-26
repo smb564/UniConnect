@@ -5,6 +5,7 @@ import com.smbsoft.uniconnect.domain.ModulePage;
 import com.smbsoft.uniconnect.domain.Post;
 import com.smbsoft.uniconnect.repository.PostRepository;
 import com.smbsoft.uniconnect.security.SecurityUtils;
+import javafx.scene.control.Pagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,5 +100,9 @@ public class PostService {
     public void delete(String id) {
         log.debug("Request to delete Post : {}", id);
         postRepository.delete(id);
+    }
+
+    public List<Post> findByModule(String module) {
+        return postRepository.findAllByModulePage(module);
     }
 }

@@ -14,6 +14,19 @@
         vm.modulePage = entity;
         vm.post = {};
         vm.post.modulePage = vm.modulePage.id;
+        vm.posts = [];
+
+
+        loadPosts();
+
+        // Getting all the posts
+        function loadPosts(){
+            Post.getModule({ module : vm.modulePage.id}, function (data) {
+                vm.posts = data;
+            });
+        }
+
+
 
         function addPost () {
             vm.isSaving = true;
@@ -26,14 +39,13 @@
 
         function onSaveSuccess(){
             vm.isSaving = false;
-            AlertService.success("Added successfully");
             vm.post.title = "";
             vm.post.description = "";
+            loadPosts();
         }
 
         function onSaveError(){
             vm.isSaving = false;
-            AlertService.error("Save Error!");
         }
     }
 

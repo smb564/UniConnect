@@ -32,7 +32,7 @@ public class PostResource {
     private final Logger log = LoggerFactory.getLogger(PostResource.class);
 
     private static final String ENTITY_NAME = "post";
-        
+
     private final PostService postService;
 
     public PostResource(PostService postService) {
@@ -122,6 +122,21 @@ public class PostResource {
         log.debug("REST request to delete Post : {}", id);
         postService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * GET  /posts/module/ :id : get the posts for module having "id"
+     *
+     * @param module the id of the module of which posts needs to be retrieved
+     * @return the ResponseEntity with status 200 (OK) and with body the post, or with status 404 (Not Found)
+     */
+    @GetMapping("/posts/module/{module}")
+    @Timed
+    public ResponseEntity<List<Post>> getPostForModule(@PathVariable String module) {
+        log.debug("REST request to get Post of module : {}", module);
+
+        List<Post> posts = postService.findByModule(module);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(posts));
     }
 
 }
