@@ -10,4 +10,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 @SuppressWarnings("unused")
 public interface StudentUserRepository extends MongoRepository<StudentUser,String> {
 
+    StudentUser findOneByUserId(String userId);
 }

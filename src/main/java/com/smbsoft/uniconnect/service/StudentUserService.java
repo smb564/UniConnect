@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * Service Implementation for managing StudentUser.
  */
@@ -30,6 +32,14 @@ public class StudentUserService {
      */
     public StudentUser save(StudentUser studentUser) {
         log.debug("Request to save StudentUser : {}", studentUser);
+        // Check if previous setting exists
+        StudentUser prevUser = studentUserRepository.findOneByUserId(studentUser.getUserId());
+
+        if (prevUser!=null){
+            log.debug("Found previous settings, delete student settings");
+            studentUserRepository.delete(prevUser.getId());
+        }
+
         StudentUser result = studentUserRepository.save(studentUser);
         return result;
     }

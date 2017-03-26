@@ -2,6 +2,7 @@ package com.smbsoft.uniconnect.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.smbsoft.uniconnect.domain.StudentUser;
+import com.smbsoft.uniconnect.security.SecurityUtils;
 import com.smbsoft.uniconnect.service.StudentUserService;
 import com.smbsoft.uniconnect.web.rest.util.HeaderUtil;
 import com.smbsoft.uniconnect.web.rest.util.PaginationUtil;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +55,10 @@ public class StudentUserResource {
         if (studentUser.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new student_user cannot already have an ID")).body(null);
         }
-        StudentUser result = studentUserService.save(studentUser);
+
+        // Set the userId to current user login
+        StudentUser result = studentUserService.save(studentUser.userID(SecurityUtils.getCurrentUserLogin()));
+
         return ResponseEntity.created(new URI("/api/student-users/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,12 +75,13 @@ public class StudentUserResource {
      */
     @PutMapping("/student-users")
     @Timed
-    public ResponseEntity<StudentUser> updateStudentUser(@Valid @RequestBody StudentUser studentUser) throws URISyntaxException {
+    public ResponseEntity<StudentUser> updateStudentUser(@Valid @RequestBody StudentUser studentUser) throws URISyntaxException, AccessDeniedException {
         log.debug("REST request to update StudentUser : {}", studentUser);
         if (studentUser.getId() == null) {
             return createStudentUser(studentUser);
         }
-        StudentUser result = studentUserService.save(studentUser);
+
+        StudentUser result = studentUserService.save(studentUser.userID(SecurityUtils.getCurrentUserLogin()));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, studentUser.getId().toString()))
             .body(result);
@@ -106,8 +112,8 @@ public class StudentUserResource {
     @Timed
     public ResponseEntity<StudentUser> getStudentUser(@PathVariable String id) {
         log.debug("REST request to get StudentUser : {}", id);
-        StudentUser student_user = studentUserService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(student_user));
+        StudentUser studentUser = studentUserService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(studentUser));
     }
 
     /**
