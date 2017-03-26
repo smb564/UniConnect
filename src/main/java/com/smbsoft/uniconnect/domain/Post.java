@@ -50,6 +50,17 @@ public class Post implements Serializable {
     @Field("resources")
     private List<String> resources;
 
+    @Field("module_page")
+    private String modulePage;
+
+    public String getModulePage() {
+        return modulePage;
+    }
+
+    public void setModulePage(String modulePage) {
+        this.modulePage = modulePage;
+    }
+
     // A comment is identified as an array, 0-text, 1-date, 2-owner
     @Field("comments")
     private List<List<String>> comments;

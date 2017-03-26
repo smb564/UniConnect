@@ -1,15 +1,20 @@
 package com.smbsoft.uniconnect.service;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.smbsoft.uniconnect.domain.ModulePage;
 import com.smbsoft.uniconnect.domain.Post;
 import com.smbsoft.uniconnect.repository.PostRepository;
 import com.smbsoft.uniconnect.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.Security;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +26,9 @@ public class PostService {
     private final Logger log = LoggerFactory.getLogger(PostService.class);
 
     private final PostRepository postRepository;
+
+    @Autowired
+    private ModulePageService modulePageService;
 
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
@@ -35,7 +43,27 @@ public class PostService {
     public Post save(Post post) {
         log.debug("Request to save Post : {}", post);
         // post owner should be the current logged in user
-        Post result = postRepository.save(post.ownerLogin(SecurityUtils.getCurrentUserLogin()));
+        Post result = postRepository.save(post
+            .ownerLogin(SecurityUtils.getCurrentUserLogin())
+            .date(LocalDate.now())
+            .votes(0)
+        );
+
+        // And the new post should be added to the module page
+        ModulePage modulePage = modulePageService.findOne(post.getModulePage());
+        //modulePage.getPosts().add(result.getId());
+        List<String> tempList = modulePage.getPosts();
+
+        if (tempList == null){
+            modulePage.setPosts(new ArrayList<String>());
+            modulePage.getPosts().add(result.getId());
+        }
+        else{
+            modulePage.getPosts().add(result.getId());
+        }
+
+        modulePageService.save(modulePage);
+
         return result;
     }
 

@@ -23,7 +23,29 @@
                         controllerAs: 'vm'
                     }
                 }
-            });
+            })
+            .state('module-thread', {
+                parent: 'module-pages-system',
+                url: '/modules/{id}',
+                data: {
+                    authorities: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_COMPANY'],
+                    pageTitle: 'Modules'
+                },
+                views:{
+                    'content@':{
+                        templateUrl: 'app/Pages/ModulePageSystem/module-thread.html',
+                        controller: 'ModuleThreadController',
+                        controllerAs: 'vm'
+                    }
+                },
+                resolve:{
+                    entity: ['$stateParams', 'ModulePage', function ($stateParams, ModulePage) {
+                        return ModulePage.get({id:$stateParams.id}).$promise;
+                    }]
+                }
+
+            })
+        ;
     }
 
     }
