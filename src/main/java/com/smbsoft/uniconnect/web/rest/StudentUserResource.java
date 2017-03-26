@@ -117,6 +117,21 @@ public class StudentUserResource {
     }
 
     /**
+     * GET  /student-users/me : get Student User for the current logged in user
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body the student_user, or with status 404 (Not Found)
+     */
+    @GetMapping("/student-users/me")
+    @Timed
+    public ResponseEntity<StudentUser> getStudentUserForLogin() {
+        log.debug("REST request to get StudentUser for login : {}", SecurityUtils.getCurrentUserLogin());
+        StudentUser studentUser = studentUserService.findByUserLogin(SecurityUtils.getCurrentUserLogin());
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(studentUser));
+    }
+
+
+
+    /**
      * DELETE  /student-users/:id : delete the "id" student_user.
      *
      * @param id the id of the student_user to delete

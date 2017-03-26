@@ -69,6 +69,24 @@ public class StudentUserService {
     }
 
     /**
+     *  Get one student_user by userLogin.
+     *
+     *  @param userLogin the id of the current user
+     *  @return the entity
+     */
+    public StudentUser findByUserLogin(String userLogin) {
+        log.debug("Request to get StudentUser using user Login : {}", userLogin );
+        StudentUser studentUser = studentUserRepository.findOneByUserId(userLogin);
+
+        // If that does not exist in the db, send a null object
+        if (studentUser==null)
+            return new StudentUser();
+        return studentUser;
+    }
+
+
+
+    /**
      *  Delete the  student_user by id.
      *
      *  @param id the id of the entity

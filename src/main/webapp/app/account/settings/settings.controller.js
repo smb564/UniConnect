@@ -18,6 +18,21 @@
         vm.settingsAccount = null;
         vm.success = null;
         vm.saveProfile = saveProfile;
+        vm.studentUser = {};
+
+        // Get the current user profile (if available and update the fields accordingly) TODO-Based on the type of user this should change
+        StudentUser.getForCurrentUser(onStudentUserLoadSuccess, onError);
+
+        function onStudentUserLoadSuccess(data){
+            vm.studentUser.currentSemester = data.currentSemester;
+            vm.studentUser.interests = data.interests;
+            vm.studentUser.graduateYear = data.graduateYear;
+            vm.studentUser.graduate = data.graduate;
+        }
+
+        function onError(err){
+            console.log("Fetching data form the server failed : " + err);
+        }
 
         /**
          * Store the "settings account" in a separate variable, and not in the shared "account" variable.
