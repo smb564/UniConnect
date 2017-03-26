@@ -165,6 +165,39 @@
         </div>
     </div>
 
+    <div class="row" ng-show="vm.isCompany && !vm.isAdmin">
+        <div class="col-md-8 col-md-offset-2">
+            <form name="editForm2" role="form" novalidate ng-submit="vm.saveCompany()" show-validation>
 
+                <h4 class="modal-title" id="myCompanyUserLabel">Update Profile</h4>
 
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group">
+                    <label class="control-label" for="field_company">Company</label>
+                    <input type="text" class="form-control" name="company" id="field_company"
+                           ng-model="vm.companyUser.company"
+                           required/>
+                    <div ng-show="editForm2.company.$invalid">
+                        <p class="help-block"
+                           ng-show="editForm2.company.$error.required">
+                            You have to specify your company/institute name
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="field_type">Type</label>
+                    <select class="form-control" name="type" ng-model="vm.companyUser.type" id="field_type">
+                        <option value="Company">Company</option>
+                        <option value="Research">Research</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <button type="submit" ng-disabled="editForm2.$invalid || vm.isSaving" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                </button>
+            </form>
+        </div>
+    </div>
 </div>

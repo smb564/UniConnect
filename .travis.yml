@@ -33,7 +33,6 @@ install:
 script:
   - chmod +x mvnw
   - ./mvnw clean test
-  - gulp test
   - ./mvnw package -Pprod -DskipTests
 notifications:
   webhooks:

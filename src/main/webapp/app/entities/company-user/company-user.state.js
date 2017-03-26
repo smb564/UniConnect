@@ -9,17 +9,17 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-        .state('student-user', {
+        .state('company-user', {
             parent: 'entity',
-            url: '/student-user?page&sort&search',
+            url: '/company-user?page&sort&search',
             data: {
                 authorities: ['ROLE_ADMIN'],
-                pageTitle: 'Student_users'
+                pageTitle: 'CompanyUsers'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/student-user/student-users.html',
-                    controller: 'StudentUserController',
+                    templateUrl: 'app/entities/company-user/company-users.html',
+                    controller: 'CompanyUserController',
                     controllerAs: 'vm'
                 }
             },
@@ -43,30 +43,30 @@
                         ascending: PaginationUtil.parseAscending($stateParams.sort),
                         search: $stateParams.search
                     };
-                }]
+                }],
             }
         })
-        .state('student-user-detail', {
-            parent: 'student-user',
-            url: '/student-user/{id}',
+        .state('company-user-detail', {
+            parent: 'company-user',
+            url: '/company-user/{id}',
             data: {
                 authorities: ['ROLE_ADMIN'],
-                pageTitle: 'StudentUser'
+                pageTitle: 'CompanyUser'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/student-user/student-user-detail.html',
-                    controller: 'StudentUserDetailController',
+                    templateUrl: 'app/entities/company-user/company-user-detail.html',
+                    controller: 'CompanyUserDetailController',
                     controllerAs: 'vm'
                 }
             },
             resolve: {
-                entity: ['$stateParams', 'StudentUser', function($stateParams, Student_user) {
-                    return Student_user.get({id : $stateParams.id}).$promise;
+                entity: ['$stateParams', 'CompanyUser', function($stateParams, CompanyUser) {
+                    return CompanyUser.get({id : $stateParams.id}).$promise;
                 }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
-                        name: $state.current.name || 'student-user',
+                        name: $state.current.name || 'company-user',
                         params: $state.params,
                         url: $state.href($state.current.name, $state.params)
                     };
@@ -74,22 +74,22 @@
                 }]
             }
         })
-        .state('student-user-detail.edit', {
-            parent: 'student-user-detail',
+        .state('company-user-detail.edit', {
+            parent: 'company-user-detail',
             url: '/detail/edit',
             data: {
                 authorities: ['ROLE_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/student-user/student-user-dialog.html',
-                    controller: 'StudentUserDialogController',
+                    templateUrl: 'app/entities/company-user/company-user-dialog.html',
+                    controller: 'CompanyUserDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['StudentUser', function(Student_user) {
-                            return Student_user.get({id : $stateParams.id}).$promise;
+                        entity: ['CompanyUser', function(CompanyUser) {
+                            return CompanyUser.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
@@ -99,80 +99,80 @@
                 });
             }]
         })
-        .state('student-user.new', {
-            parent: 'student-user',
+        .state('company-user.new', {
+            parent: 'company-user',
             url: '/new',
             data: {
                 authorities: ['ROLE_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/student-user/student-user-dialog.html',
-                    controller: 'StudentUserDialogController',
+                    templateUrl: 'app/entities/company-user/company-user-dialog.html',
+                    controller: 'CompanyUserDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: function () {
                             return {
-                                graduate: null,
-                                graduate_year: null,
-                                current_semester: null,
+                                company: null,
+                                type: null,
+                                userLogin: null,
                                 id: null
                             };
                         }
                     }
                 }).result.then(function() {
-                    $state.go('student-user', null, { reload: 'student-user' });
+                    $state.go('company-user', null, { reload: 'company-user' });
                 }, function() {
-                    $state.go('student-user');
+                    $state.go('company-user');
                 });
             }]
         })
-        .state('student-user.edit', {
-            parent: 'student-user',
+        .state('company-user.edit', {
+            parent: 'company-user',
             url: '/{id}/edit',
             data: {
                 authorities: ['ROLE_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/student-user/student-user-dialog.html',
-                    controller: 'StudentUserDialogController',
+                    templateUrl: 'app/entities/company-user/company-user-dialog.html',
+                    controller: 'CompanyUserDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['StudentUser', function(Student_user) {
-                            return Student_user.get({id : $stateParams.id}).$promise;
+                        entity: ['CompanyUser', function(CompanyUser) {
+                            return CompanyUser.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('student-user', null, { reload: 'student-user' });
+                    $state.go('company-user', null, { reload: 'company-user' });
                 }, function() {
                     $state.go('^');
                 });
             }]
         })
-        .state('student-user.delete', {
-            parent: 'student-user',
+        .state('company-user.delete', {
+            parent: 'company-user',
             url: '/{id}/delete',
             data: {
                 authorities: ['ROLE_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/student-user/student-user-delete-dialog.html',
-                    controller: 'StudentUserDeleteController',
+                    templateUrl: 'app/entities/company-user/company-user-delete-dialog.html',
+                    controller: 'CompanyUserDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
-                        entity: ['StudentUser', function(Student_user) {
-                            return Student_user.get({id : $stateParams.id}).$promise;
+                        entity: ['CompanyUser', function(CompanyUser) {
+                            return CompanyUser.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('student-user', null, { reload: 'student-user' });
+                    $state.go('company-user', null, { reload: 'company-user' });
                 }, function() {
                     $state.go('^');
                 });
