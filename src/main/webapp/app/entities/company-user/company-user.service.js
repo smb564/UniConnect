@@ -20,7 +20,17 @@
                     return data;
                 }
             },
-            'update': { method:'PUT' }
+            'update': { method:'PUT' },
+            'getForCurrentUser': {
+                method : 'GET',
+                url : 'api/company-users/me',
+                transformResponse : function(data){
+                    if (data){
+                        data = angular.fromJson(data);
+                    }
+                    return data;
+                }
+            }
         });
     }
 })();

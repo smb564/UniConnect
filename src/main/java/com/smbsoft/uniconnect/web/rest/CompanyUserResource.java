@@ -2,6 +2,7 @@ package com.smbsoft.uniconnect.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.smbsoft.uniconnect.domain.CompanyUser;
+import com.smbsoft.uniconnect.security.SecurityUtils;
 import com.smbsoft.uniconnect.service.CompanyUserService;
 import com.smbsoft.uniconnect.web.rest.util.HeaderUtil;
 import com.smbsoft.uniconnect.web.rest.util.PaginationUtil;
@@ -32,7 +33,7 @@ public class CompanyUserResource {
     private final Logger log = LoggerFactory.getLogger(CompanyUserResource.class);
 
     private static final String ENTITY_NAME = "companyUser";
-        
+
     private final CompanyUserService companyUserService;
 
     public CompanyUserResource(CompanyUserService companyUserService) {
@@ -53,7 +54,9 @@ public class CompanyUserResource {
         if (companyUser.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new companyUser cannot already have an ID")).body(null);
         }
-        CompanyUser result = companyUserService.save(companyUser);
+
+        // Use the current user as the userLogin
+        CompanyUser result = companyUserService.save(companyUser.userLogin(SecurityUtils.getCurrentUserLogin()));
         return ResponseEntity.created(new URI("/api/company-users/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -75,7 +78,10 @@ public class CompanyUserResource {
         if (companyUser.getId() == null) {
             return createCompanyUser(companyUser);
         }
-        CompanyUser result = companyUserService.save(companyUser);
+
+        // Make userLogin as the current user
+        CompanyUser result = companyUserService.save(companyUser.userLogin(SecurityUtils.getCurrentUserLogin()));
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, companyUser.getId().toString()))
             .body(result);
@@ -107,6 +113,19 @@ public class CompanyUserResource {
     public ResponseEntity<CompanyUser> getCompanyUser(@PathVariable String id) {
         log.debug("REST request to get CompanyUser : {}", id);
         CompanyUser companyUser = companyUserService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(companyUser));
+    }
+
+    /**
+     * GET  /company-users/me get the company user for the logged in user
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body the companyUser, or with status 404 (Not Found)
+     */
+    @GetMapping("/company-users/me")
+    @Timed
+    public ResponseEntity<CompanyUser> getCompanyUserByLogin() {
+        log.debug("REST request to get CompanyUser for login : {}", SecurityUtils.getCurrentUserLogin());
+        CompanyUser companyUser = companyUserService.findByUserLogin(SecurityUtils.getCurrentUserLogin());
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(companyUser));
     }
 

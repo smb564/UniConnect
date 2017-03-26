@@ -5,9 +5,9 @@
         .module('uniConnectApp')
         .controller('SettingsController', SettingsController);
 
-    SettingsController.$inject = ['Principal', 'Auth', 'StudentUser', 'INTEREST_FIELDS'];
+    SettingsController.$inject = ['$scope', 'Principal', 'Auth', 'StudentUser', 'CompanyUser', 'INTEREST_FIELDS'];
 
-    function SettingsController (Principal, Auth, StudentUser, INTEREST_FIELDS) {
+    function SettingsController ($scope, Principal, Auth, StudentUser, CompanyUser, INTEREST_FIELDS) {
         var vm = this;
 
         // Getting the user type
@@ -36,14 +36,25 @@
         vm.success = null;
         vm.saveProfile = saveProfile;
         vm.studentUser = {};
+        vm.saveCompany = saveCompany;
+        vm.companyUser = {};
 
-        // Get the current user profile (if available and update the fields accordingly)
-        if (vm.isUser && !vm.isAdmin){
-            StudentUser.getForCurrentUser(onStudentUserLoadSuccess, onError);
-        }
+        $scope.$watch(vm.isAdmin || vm.isCompany || vm.isUser, function(){
+            // Get the current user profile (if available and update the fields accordingly)
+            if (vm.isUser && !vm.isAdmin){
+                StudentUser.getForCurrentUser(onStudentUserLoadSuccess, onError);
+            }
 
-        if (vm.isCompany && !vm.isAdmin){
-            // Get the company data
+            if (vm.isCompany && !vm.isAdmin){
+                // Get the company data
+                CompanyUser.getForCurrentUser(onCompanyUserLoadSuccess, onError);
+            }
+        });
+
+        function onCompanyUserLoadSuccess(data){
+            console.log(data);
+            vm.companyUser.company = data.company;
+            vm.companyUser.type = data.type;
         }
 
         function onStudentUserLoadSuccess(data){
@@ -94,6 +105,15 @@
                 StudentUser.update(vm.studentUser, onSaveSuccess, onSaveError);
             } else {
                 StudentUser.save(vm.studentUser, onSaveSuccess, onSaveError);
+            }
+        }
+
+        function saveCompany () {
+            vm.isSaving = true;
+            if (vm.companyUser.id !== null) {
+                CompanyUser.update(vm.companyUser, onSaveSuccess, onSaveError);
+            } else {
+                CompanyUser.save(vm.companyUser, onSaveSuccess, onSaveError);
             }
         }
 
