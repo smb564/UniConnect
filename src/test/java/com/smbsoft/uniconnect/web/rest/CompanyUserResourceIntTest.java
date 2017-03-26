@@ -43,8 +43,8 @@ public class CompanyUserResourceIntTest {
     private static final CompanyType DEFAULT_TYPE = CompanyType.Company;
     private static final CompanyType UPDATED_TYPE = CompanyType.Research;
 
-    private static final String DEFAULT_USER_LOGIN = "AAAAAAAAAA";
-    private static final String UPDATED_USER_LOGIN = "BBBBBBBBBB";
+    private static final String DEFAULT_USER_LOGIN = "User";
+    private static final String UPDATED_USER_LOGIN = "NEW User";
 
     @Autowired
     private CompanyUserRepository companyUserRepository;
@@ -111,7 +111,6 @@ public class CompanyUserResourceIntTest {
         CompanyUser testCompanyUser = companyUserList.get(companyUserList.size() - 1);
         assertThat(testCompanyUser.getCompany()).isEqualTo(DEFAULT_COMPANY);
         assertThat(testCompanyUser.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testCompanyUser.getUserLogin()).isEqualTo(DEFAULT_USER_LOGIN);
     }
 
     @Test
@@ -211,7 +210,6 @@ public class CompanyUserResourceIntTest {
         CompanyUser testCompanyUser = companyUserList.get(companyUserList.size() - 1);
         assertThat(testCompanyUser.getCompany()).isEqualTo(UPDATED_COMPANY);
         assertThat(testCompanyUser.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testCompanyUser.getUserLogin()).isEqualTo(UPDATED_USER_LOGIN);
     }
 
     @Test
