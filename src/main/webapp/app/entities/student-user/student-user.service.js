@@ -2,11 +2,11 @@
     'use strict';
     angular
         .module('uniConnectApp')
-        .factory('Student_user', Student_user);
+        .factory('StudentUser', StudentUser);
 
-    Student_user.$inject = ['$resource'];
+    StudentUser.$inject = ['$resource'];
 
-    function Student_user ($resource) {
+    function StudentUser ($resource) {
         var resourceUrl =  'api/student-users/:id';
 
         return $resource(resourceUrl, {}, {

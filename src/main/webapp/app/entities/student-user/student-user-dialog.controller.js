@@ -3,11 +3,11 @@
 
     angular
         .module('uniConnectApp')
-        .controller('Student_userDialogController', Student_userDialogController);
+        .controller('StudentUserDialogController', StudentUserDialogController);
 
-    Student_userDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Student_user'];
+    StudentUserDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'StudentUser'];
 
-    function Student_userDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Student_user) {
+    function StudentUserDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, StudentUser) {
         var vm = this;
 
         vm.student_user = entity;
@@ -25,9 +25,9 @@
         function save () {
             vm.isSaving = true;
             if (vm.student_user.id !== null) {
-                Student_user.update(vm.student_user, onSaveSuccess, onSaveError);
+                StudentUser.update(vm.student_user, onSaveSuccess, onSaveError);
             } else {
-                Student_user.save(vm.student_user, onSaveSuccess, onSaveError);
+                StudentUser.save(vm.student_user, onSaveSuccess, onSaveError);
             }
         }
 

@@ -3,11 +3,11 @@
 
     angular
         .module('uniConnectApp')
-        .controller('Student_userController', Student_userController);
+        .controller('StudentUserController', StudentUserController);
 
-    Student_userController.$inject = ['$state', 'Student_user', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    StudentUserController.$inject = ['$state', 'StudentUser', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
-    function Student_userController($state, Student_user, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function StudentUserController($state, Student_user, ParseLinks, AlertService, paginationConstants, pagingParams) {
 
         var vm = this;
 

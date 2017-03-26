@@ -19,7 +19,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/entities/student-user/student-users.html',
-                    controller: 'Student_userController',
+                    controller: 'StudentUserController',
                     controllerAs: 'vm'
                 }
             },
@@ -51,17 +51,17 @@
             url: '/student-user/{id}',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'Student_user'
+                pageTitle: 'StudentUser'
             },
             views: {
                 'content@': {
                     templateUrl: 'app/entities/student-user/student-user-detail.html',
-                    controller: 'Student_userDetailController',
+                    controller: 'StudentUserDetailController',
                     controllerAs: 'vm'
                 }
             },
             resolve: {
-                entity: ['$stateParams', 'Student_user', function($stateParams, Student_user) {
+                entity: ['$stateParams', 'StudentUser', function($stateParams, Student_user) {
                     return Student_user.get({id : $stateParams.id}).$promise;
                 }],
                 previousState: ["$state", function ($state) {
@@ -83,12 +83,12 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/student-user/student-user-dialog.html',
-                    controller: 'Student_userDialogController',
+                    controller: 'StudentUserDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Student_user', function(Student_user) {
+                        entity: ['StudentUser', function(Student_user) {
                             return Student_user.get({id : $stateParams.id}).$promise;
                         }]
                     }
@@ -108,7 +108,7 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/student-user/student-user-dialog.html',
-                    controller: 'Student_userDialogController',
+                    controller: 'StudentUserDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
@@ -138,12 +138,12 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/student-user/student-user-dialog.html',
-                    controller: 'Student_userDialogController',
+                    controller: 'StudentUserDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Student_user', function(Student_user) {
+                        entity: ['StudentUser', function(Student_user) {
                             return Student_user.get({id : $stateParams.id}).$promise;
                         }]
                     }
@@ -163,11 +163,11 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/student-user/student-user-delete-dialog.html',
-                    controller: 'Student_userDeleteController',
+                    controller: 'StudentUserDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
-                        entity: ['Student_user', function(Student_user) {
+                        entity: ['StudentUser', function(Student_user) {
                             return Student_user.get({id : $stateParams.id}).$promise;
                         }]
                     }

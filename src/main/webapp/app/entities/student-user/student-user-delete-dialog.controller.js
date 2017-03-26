@@ -3,11 +3,11 @@
 
     angular
         .module('uniConnectApp')
-        .controller('Student_userDeleteController',Student_userDeleteController);
+        .controller('StudentUserDeleteController',StudentUserDeleteController);
 
-    Student_userDeleteController.$inject = ['$uibModalInstance', 'entity', 'Student_user'];
+    StudentUserDeleteController.$inject = ['$uibModalInstance', 'entity', 'StudentUser'];
 
-    function Student_userDeleteController($uibModalInstance, entity, Student_user) {
+    function StudentUserDeleteController($uibModalInstance, entity, Student_user) {
         var vm = this;
 
         vm.student_user = entity;

@@ -3,11 +3,11 @@
 
     angular
         .module('uniConnectApp')
-        .controller('Student_userDetailController', Student_userDetailController);
+        .controller('StudentUserDetailController', StudentUserDetailController);
 
-    Student_userDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Student_user'];
+    StudentUserDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'StudentUser'];
 
-    function Student_userDetailController($scope, $rootScope, $stateParams, previousState, entity, Student_user) {
+    function StudentUserDetailController($scope, $rootScope, $stateParams, previousState, entity, Student_user) {
         var vm = this;
 
         vm.student_user = entity;
