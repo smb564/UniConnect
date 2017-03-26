@@ -5,5 +5,7 @@
         .module('uniConnectApp')
         .constant('VERSION', "0.0.1-SNAPSHOT")
         .constant('DEBUG_INFO_ENABLED', true)
+        .constant('INTEREST_FIELDS', ['Science', 'Engineering', 'Planes', 'Mathematics','Programming',
+                                        'Winodows', 'Education', 'Health', 'Fitness'])
 ;
 })();

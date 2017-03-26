@@ -5,10 +5,13 @@
         .module('uniConnectApp')
         .controller('SettingsController', SettingsController);
 
-    SettingsController.$inject = ['Principal', 'Auth', 'StudentUser'];
+    SettingsController.$inject = ['Principal', 'Auth', 'StudentUser', 'INTEREST_FIELDS'];
 
-    function SettingsController (Principal, Auth, StudentUser) {
+    function SettingsController (Principal, Auth, StudentUser, INTEREST_FIELDS) {
         var vm = this;
+
+        // Interests should be one of the following (Loaded from constants)
+        vm.interests = INTEREST_FIELDS;
 
         vm.error = null;
         vm.save = save;
@@ -49,7 +52,6 @@
 
         function saveProfile(){
             vm.isSaving = true;
-            vm.studentUser.interests = ["i1", "i2"];
             if (vm.studentUser.id !== null) {
                 StudentUser.update(vm.studentUser, onSaveSuccess, onSaveError);
             } else {
@@ -58,14 +60,15 @@
         }
 
         function onSaveSuccess(){
-            console.log("Save Success!");
             vm.isSaving = false;
-
+            vm.error = null;
+            vm.success = "OK";
         }
 
         function onSaveError(){
-            console.log("Save error!, failed :-(");
             vm.isSaving = false;
+            vm.success = null;
+            vm.error = "ERROR";
         }
     }
 })();
