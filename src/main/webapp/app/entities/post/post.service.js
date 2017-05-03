@@ -48,6 +48,15 @@
                     }
                     return data;
                 }
+            },
+            'saveModule': {
+                method : 'POST',
+                url : 'api/posts/module/:module',
+                transformRequest: function (data) {
+                    var copy = angular.copy(data);
+                    copy.date = DateUtils.convertLocalDateToServer(copy.date);
+                    return angular.toJson(copy);
+                }
             }
         });
     }

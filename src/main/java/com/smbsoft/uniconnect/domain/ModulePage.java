@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -117,6 +118,12 @@ public class ModulePage implements Serializable {
         return Objects.equals(id, modulePage.id);
     }
 
+    public void addPost(String postId){
+        if (posts==null)
+            posts = new ArrayList<>();
+
+        posts.add(postId);
+    }
     @Override
     public int hashCode() {
         return Objects.hashCode(id);

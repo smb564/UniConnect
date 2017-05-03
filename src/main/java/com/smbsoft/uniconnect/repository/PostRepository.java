@@ -13,6 +13,4 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public interface PostRepository extends MongoRepository<Post,String> {
-
-    List<Post> findAllByModulePage(String module);
 }

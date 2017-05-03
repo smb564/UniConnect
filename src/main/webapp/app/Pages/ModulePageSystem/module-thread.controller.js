@@ -13,8 +13,8 @@
         vm.addPost = addPost;
         vm.modulePage = entity;
         vm.post = {};
-        vm.post.modulePage = vm.modulePage.id;
         vm.posts = [];
+        vm.addingPost = false;
 
         loadPosts();
 
@@ -29,10 +29,10 @@
 
         function addPost () {
             vm.isSaving = true;
-            if (vm.post.id !== null) {
+            if (vm.post.id != null) {
                 Post.update(vm.post, onSaveSuccess, onSaveError);
             } else {
-                Post.save(vm.post, onSaveSuccess, onSaveError);
+                Post.saveModule({module : vm.modulePage.id}, vm.post, onSaveSuccess, onSaveError);
             }
         }
 

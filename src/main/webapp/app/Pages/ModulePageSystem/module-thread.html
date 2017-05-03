@@ -6,7 +6,11 @@
 
     <jhi-alert></jhi-alert>
 
-    <form name="editForm" role="form" novalidate ng-submit="vm.addPost()" show-validation>
+    <button type="button" ng-click="addingPost = !addingPost" ng-hide="addingPost" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus"></span>&nbsp;<span>Add Post</span>
+    </button>
+
+    <form ng-show="addingPost" name="editForm" role="form" novalidate ng-submit="vm.addPost()" show-validation>
         <h4>Add New Post</h4>
         <jhi-alert-error></jhi-alert-error>
         <div class="form-group">
@@ -52,9 +56,18 @@
             </div>
         </div>
 
-        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
-            <span class="glyphicon glyphicon-plus"></span>&nbsp;<span>Add</span>
-        </button>
+        <div class="row">
+            <div class="col-md-1">
+                <button type="submit" ng-click="addingPost = !addingPost" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;<span>Add</span>&nbsp&nbsp&nbsp
+                </button>
+            </div>
+            <div class="col-md-1">
+                <button type="button" ng-click="addingPost = !addingPost" class="btn btn-default">
+                    Close
+                </button>
+            </div>
+        </div>
     </form>
 
     <hr>

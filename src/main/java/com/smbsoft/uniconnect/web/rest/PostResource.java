@@ -42,6 +42,26 @@ public class PostResource {
     /**
      * POST  /posts : Create a new post.
      *
+     * @param post the post to create, id of the module
+     * @return the ResponseEntity with status 201 (Created) and with body the new post, or with status 400 (Bad Request) if the post has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/posts/module/{id}")
+    @Timed
+    public ResponseEntity<Post> createPostModule(@Valid @RequestBody Post post, @PathVariable String id) throws URISyntaxException {
+        log.debug("REST request to save Post to module : {}", post);
+        if (post.getId() != null) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new post cannot already have an ID")).body(null);
+        }
+        Post result = postService.saveModule(post, id);
+        return ResponseEntity.created(new URI("/api/posts/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * POST  /posts/module/{id}: Create a new post.
+     *
      * @param post the post to create
      * @return the ResponseEntity with status 201 (Created) and with body the new post, or with status 400 (Bad Request) if the post has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
@@ -58,6 +78,8 @@ public class PostResource {
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
+
+
 
     /**
      * PUT  /posts : Updates an existing post.

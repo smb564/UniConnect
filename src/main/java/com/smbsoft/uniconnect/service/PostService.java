@@ -43,6 +43,26 @@ public class PostService {
      */
     public Post save(Post post) {
         log.debug("Request to save Post : {}", post);
+
+        // post owner should be the current logged in user
+        Post result = postRepository.save(post
+            .ownerLogin(SecurityUtils.getCurrentUserLogin())
+            .date(LocalDate.now())
+            .votes(0)
+        );
+
+        return result;
+    }
+
+    /**
+     * Save a post.
+     *
+     * @param post the entity to save
+     * @return the persisted entity
+     */
+    public Post saveModule(Post post, String moduleId) {
+        log.debug("Request to save Post : {}", post);
+
         // post owner should be the current logged in user
         Post result = postRepository.save(post
             .ownerLogin(SecurityUtils.getCurrentUserLogin())
@@ -51,8 +71,8 @@ public class PostService {
         );
 
         // And the new post should be added to the module page
-        ModulePage modulePage = modulePageService.findOne(post.getModulePage());
-        //modulePage.getPosts().add(result.getId());
+        ModulePage modulePage = modulePageService.findOne(moduleId);
+
         List<String> tempList = modulePage.getPosts();
 
         if (tempList == null){
@@ -102,7 +122,17 @@ public class PostService {
         postRepository.delete(id);
     }
 
-    public List<Post> findByModule(String module) {
-        return postRepository.findAllByModulePage(module);
+    public List<Post> findByModule(String moduleId) {
+        ModulePage modulePage = modulePageService.findOne(moduleId);
+        List<Post> posts = new ArrayList<>();
+
+        if (modulePage.getPosts() == null)
+            return new ArrayList<>();
+
+        for(String postId : modulePage.getPosts()){
+            posts.add(postRepository.findOne(postId));
+        }
+
+        return posts;
     }
 }
