@@ -26,7 +26,7 @@
             })
             .state('module-thread', {
                 parent: 'module-pages-system',
-                url: '/modules/{id}',
+                url: '/{id}',
                 data: {
                     authorities: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_COMPANY'],
                     pageTitle: 'Modules'

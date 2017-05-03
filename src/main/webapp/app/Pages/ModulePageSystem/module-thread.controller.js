@@ -16,7 +16,6 @@
         vm.post.modulePage = vm.modulePage.id;
         vm.posts = [];
 
-
         loadPosts();
 
         // Getting all the posts

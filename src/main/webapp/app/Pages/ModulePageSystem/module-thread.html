@@ -33,8 +33,8 @@
 
         <div class="form-group">
             <label class="control-label" for="field_description">Details</label>
-            <input type="textarea" class="form-control" name="description" id="field_description"
-                   ng-model="vm.post.description"
+            <textarea type="textarea" class="form-control" name="description" id="field_description"
+                   ng-model="vm.post.description" rows=5
                    required ng-minlength="5" ng-maxlength="150"/>
             <div ng-show="editForm.description.$invalid">
                 <p class="help-block"
@@ -53,7 +53,7 @@
         </div>
 
         <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
-            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+            <span class="glyphicon glyphicon-plus"></span>&nbsp;<span>Add</span>
         </button>
     </form>
 
