@@ -44,12 +44,7 @@ public class PostService {
     public Post save(Post post) {
         log.debug("Request to save Post : {}", post);
 
-        // post owner should be the current logged in user
-        Post result = postRepository.save(post
-            .ownerLogin(SecurityUtils.getCurrentUserLogin())
-            .date(LocalDate.now())
-            .votes(0)
-        );
+        Post result = postRepository.save(post);
 
         return result;
     }

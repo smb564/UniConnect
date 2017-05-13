@@ -30,12 +30,18 @@
                 }
             },
             'save': {
+                url: 'api/comments/post/:postId',
                 method: 'POST',
                 transformRequest: function (data) {
                     var copy = angular.copy(data);
                     copy.date = DateUtils.convertLocalDateToServer(copy.date);
                     return angular.toJson(copy);
                 }
+            },
+            'getForPost' : {
+                method : 'GET',
+                isArray : true,
+                url : 'api/comments/post/:id'
             }
         });
     }

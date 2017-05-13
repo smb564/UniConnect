@@ -3,6 +3,7 @@ package com.smbsoft.uniconnect.service;
 import com.smbsoft.uniconnect.domain.Comment;
 import com.smbsoft.uniconnect.domain.Post;
 import com.smbsoft.uniconnect.repository.CommentRepository;
+import com.smbsoft.uniconnect.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.security.Security;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,8 +45,37 @@ public class CommentService {
     public Comment save(Comment comment) {
         log.debug("Request to save Comment : {}", comment);
         Comment result = commentRepository.save(comment);
+
         return result;
     }
+
+    /**
+     * Save a comment and add to post.
+     *
+     * @param comment the entity to save
+     * @param postId the d of the post
+     * @return the persisted entity
+     */
+    public Comment addToPost(Comment comment, String postId) {
+        log.debug("Request to save Comment : {}", comment);
+        // Set the current user and current login
+        Comment result = commentRepository.save(comment
+            .date(LocalDate.now())
+            .user(SecurityUtils.getCurrentUserLogin())
+        );
+
+        // Add the created comments to related post
+        Post post = postService.findOne(postId);
+
+        if (post.getComments() == null)
+            post.setComments(new ArrayList<>());
+
+        post.getComments().add(result.getId());
+        postService.save(post);
+
+        return result;
+    }
+
 
     /**
      *  Get all the comments.
@@ -91,10 +123,12 @@ public class CommentService {
 
         List<Comment> comments = new ArrayList<>();
 
-        if(post.getComments() == null)
-            return null;
+        Optional<List<String>> commentsOptional = Optional.ofNullable(post.getComments());
 
-        for(String commentId : post.getComments()){
+        if(!commentsOptional.isPresent())
+            return comments;
+
+        for(String commentId : commentsOptional.get()){
             comments.add(commentRepository.findOne(commentId));
         }
 

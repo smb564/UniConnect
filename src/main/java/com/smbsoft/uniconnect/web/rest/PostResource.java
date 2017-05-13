@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,6 +74,12 @@ public class PostResource {
         if (post.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new post cannot already have an ID")).body(null);
         }
+
+        // Fill up with empty arrays to eliminate null
+        post.setComments(new ArrayList<>());
+        post.setTags(new ArrayList<>());
+        post.setVoteUsers(new ArrayList<>());
+
         Post result = postService.save(post);
         return ResponseEntity.created(new URI("/api/posts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -43,17 +44,18 @@ public class CommentResource {
      * POST  /comments : Create a new comment.
      *
      * @param comment the comment to create
+     * @param id the id of the post that the comment should be added
      * @return the ResponseEntity with status 201 (Created) and with body the new comment, or with status 400 (Bad Request) if the comment has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PostMapping("/comments")
+    @PostMapping("/comments/post/{id}")
     @Timed
-    public ResponseEntity<Comment> createComment(@Valid @RequestBody Comment comment) throws URISyntaxException {
+    public ResponseEntity<Comment> createComment(@Valid @RequestBody Comment comment, @PathVariable String id) throws URISyntaxException {
         log.debug("REST request to save Comment : {}", comment);
         if (comment.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new comment cannot already have an ID")).body(null);
         }
-        Comment result = commentService.save(comment);
+        Comment result = commentService.addToPost(comment, id);
         return ResponseEntity.created(new URI("/api/comments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -73,7 +75,7 @@ public class CommentResource {
     public ResponseEntity<Comment> updateComment(@Valid @RequestBody Comment comment) throws URISyntaxException {
         log.debug("REST request to update Comment : {}", comment);
         if (comment.getId() == null) {
-            return createComment(comment);
+            return ResponseEntity.badRequest().body(new Comment());
         }
         Comment result = commentService.save(comment);
         return ResponseEntity.ok()
@@ -133,7 +135,7 @@ public class CommentResource {
     @GetMapping("/comments/post/{id}")
     @Timed
     public ResponseEntity<List<Comment>> getCommentForPost(@PathVariable String id) {
-        log.debug("REST request to get Comments for module : {}", id);
+        log.debug("REST request to get Comments for post : {}", id);
         List<Comment> comments = commentService.findForComment(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(comments));
     }

@@ -10,7 +10,15 @@
     function ModuleThreadController(entity, Post, AlertService){
         var vm = this;
 
+        // Method to save new post
         vm.addPost = addPost;
+
+        // To format the string before displaying
+        vm.formatString = formatString;
+
+        // To format date
+        vm.formatDate = formatDate;
+
         vm.modulePage = entity;
         vm.post = {};
         vm.posts = [];
@@ -45,6 +53,16 @@
 
         function onSaveError(){
             vm.isSaving = false;
+        }
+
+        function formatString(text){
+            // Add line breaks when displaying
+            return text.replace("\n", "<br>");
+        }
+
+        function formatDate(dateString){
+            console.log(dateString.split("T") + "This");
+            return dateString.split("T")[0];
         }
     }
 
