@@ -47,12 +47,8 @@ public class Post implements Serializable {
     @Field("tags")
     private List<String> tags;
 
-    @Field("resources")
-    private List<String> resources;
-
-    // A comment is idepntified as an array, 0-text, 1-date, 2-owner
     @Field("comments")
-    private List<List<String>> comments;
+    private List<String> comments;
 
     public List<String> getVoteUsers() {
         return voteUsers;
@@ -70,19 +66,11 @@ public class Post implements Serializable {
         this.tags = tags;
     }
 
-    public List<String> getResources() {
-        return resources;
-    }
-
-    public void setResources(List<String> resources) {
-        this.resources = resources;
-    }
-
-    public List<List<String>> getComments() {
+    public List<String> getComments() {
         return comments;
     }
 
-    public void setComments(List<List<String>> comments) {
+    public void setComments(List<String> comments) {
         this.comments = comments;
     }
 

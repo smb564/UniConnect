@@ -83,7 +83,7 @@
                     <div class="col-md-2 pull-right">
                         <p>Date : {{post.date}}</p>
                         <p class="">{{module.comments.length || 0}} comments</p>
-                        <button type="button" class="btn btn-info btn-sm">
+                        <button type="button" class="btn btn-info btn-sm" ui-sref="module-comments({postId : post.id})">
                             <span class="glyphicon glyphicon-eye-open"></span>
                             <span class="hidden-xs hidden-sm"></span>
                             Comments

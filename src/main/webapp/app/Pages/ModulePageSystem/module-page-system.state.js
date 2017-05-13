@@ -45,6 +45,27 @@
                 }
 
             })
+
+            .state('module-comments', {
+                parent: 'module-thread',
+                url : '/{postId}',
+                data: {
+                    authorities: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_COMPANY'],
+                    pageTitle: 'Comments'
+                },
+                views:{
+                    'content@':{
+                        templateUrl: 'app/Pages/ModulePageSystem/module-comments.html',
+                        controller: 'ModuleCommentsController',
+                        controllerAs: 'vm'
+                    }
+                },
+                resolve:{
+                    entity: ['$stateParams', 'Post', function ($stateParams, Post) {
+                        return Post.get({id:$stateParams.postId}).$promise;
+                    }]
+                }
+            })
         ;
     }
 
