@@ -29,10 +29,14 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    private final PostService postService;
+    private PostService postService;
 
-    public CommentService(CommentRepository commentRepository, PostService postService) {
+    public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
+    }
+
+    @Autowired
+    public void setPostService(PostService postService){
         this.postService = postService;
     }
 

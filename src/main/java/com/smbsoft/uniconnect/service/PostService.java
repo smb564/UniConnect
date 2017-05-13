@@ -31,15 +31,21 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    private final CommentService commentService;
+    private CommentService commentService;
 
     @Autowired
     private ModulePageService modulePageService;
 
-    public PostService(PostRepository postRepository, CommentService commentService) {
+    public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
+    }
+
+    @Autowired
+    public void setCommentService(CommentService commentService){
         this.commentService = commentService;
     }
+
+
 
     /**
      * Save a post.
