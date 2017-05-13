@@ -136,6 +136,23 @@ public class PostService {
         postRepository.delete(id);
     }
 
+    public void deleteOfModulePage(String id, String moduleId){
+        // Remove from the post list
+        ModulePage modulePage = modulePageService.findOne(moduleId);
+
+        Iterator<String> iter = modulePage.getPosts().iterator();
+
+        while(iter.hasNext()){
+            if (iter.next().equals(id)){
+                iter.remove();
+                break;
+            }
+        }
+
+        // Now delete the post
+        delete(id);
+    }
+
     public List<Post> findByModule(String moduleId) {
         ModulePage modulePage = modulePageService.findOne(moduleId);
         List<Post> posts = new ArrayList<>();

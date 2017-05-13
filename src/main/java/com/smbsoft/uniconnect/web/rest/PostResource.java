@@ -54,6 +54,7 @@ public class PostResource {
     @Timed
     public ResponseEntity<Post> createPostModule(@Valid @RequestBody Post post, @PathVariable String id) throws URISyntaxException {
         log.debug("REST request to save Post to module : {}", post);
+
         if (post.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new post cannot already have an ID")).body(null);
         }
@@ -157,6 +158,29 @@ public class PostResource {
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN) ||
             SecurityUtils.getCurrentUserLogin().equals(postService.findOne(id).getOwnerLogin())){
             postService.delete(id);
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        }else{
+            // Otherwise cannot delete, so bad request
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * DELETE  /posts/:id : delete the "id" post.
+     *
+     * @param id the id of the post to delete
+     * @param moduleId the id of the module page
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/posts/{id}/modules/{moduleId}")
+    @Timed
+    public ResponseEntity<Void> deletePostOfModulePage(@PathVariable String id, @PathVariable String moduleId) {
+        log.debug("REST request to delete Post : {} of Module : {}", id, moduleId);
+
+        // Should be either a admin or the creator
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN) ||
+            SecurityUtils.getCurrentUserLogin().equals(postService.findOne(id).getOwnerLogin())){
+            postService.deleteOfModulePage(id, moduleId);
             return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
         }else{
             // Otherwise cannot delete, so bad request
