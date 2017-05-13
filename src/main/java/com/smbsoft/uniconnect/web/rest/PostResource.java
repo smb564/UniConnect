@@ -168,4 +168,19 @@ public class PostResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(posts));
     }
 
+    /**
+     * GET  /posts/:postId/:userLogin : up vote the post having postId by userLogin
+     *
+     * @param postId the id of the post to upvote
+     * @param userLogin the login of the user who upvoted
+     * @return the ResponseEntity with status 200 (OK) and with body the post, or with status 404 (Not Found)
+     */
+    @GetMapping("/posts/{postId}/{userLogin}")
+    @Timed
+    public ResponseEntity<Post> upvotePost(@PathVariable String postId, @PathVariable String userLogin) {
+        log.debug("REST request to upvote Post : {}", postId);
+        Post post = postService.upvotePost(postId, userLogin);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(post));
+    }
+
 }

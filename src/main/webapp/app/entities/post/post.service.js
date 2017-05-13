@@ -57,6 +57,10 @@
                     copy.date = DateUtils.convertLocalDateToServer(copy.date);
                     return angular.toJson(copy);
                 }
+            },
+            'upVote' : {
+                url : 'api/posts/:postId/:userLogin',
+                method : "GET"
             }
         });
     }

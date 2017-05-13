@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import java.security.Security;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Post.
@@ -129,5 +131,36 @@ public class PostService {
         }
 
         return posts;
+    }
+
+    public Post upvotePost(String postId, String userLogin){
+        Post post = postRepository.findOne(postId);
+
+        Optional<List<String>> voteUserOptional = Optional.ofNullable(post.getVoteUsers());
+
+        if (!voteUserOptional.isPresent()){
+            post.setVoteUsers(new ArrayList<>());
+            post.getVoteUsers().add(userLogin);
+            post.incrementVotes();
+            return save(post);
+        }
+
+        Iterator<String> iter = post.getVoteUsers().iterator();
+
+        while(iter.hasNext()){
+            if (userLogin.equals(iter.next())){
+                // Already voted user
+                // decrement votes and remove userLogin from the vote list
+                post.decrementVotes();
+                iter.remove();
+                return save(post);
+            }
+        }
+
+        // If nothing returned, the user should be incrementing votes
+        post.incrementVotes();
+        post.getVoteUsers().add(userLogin);
+
+        return save(post);
     }
 }

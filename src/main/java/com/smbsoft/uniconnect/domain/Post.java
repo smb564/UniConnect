@@ -178,4 +178,12 @@ public class Post implements Serializable {
             ", ownerLogin='" + ownerLogin + "'" +
             '}';
     }
+
+    public void incrementVotes(){
+        this.votes ++;
+    }
+
+    public void decrementVotes(){
+        this.votes --;
+    }
 }
