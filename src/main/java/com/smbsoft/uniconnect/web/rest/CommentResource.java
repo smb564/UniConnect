@@ -32,7 +32,7 @@ public class CommentResource {
     private final Logger log = LoggerFactory.getLogger(CommentResource.class);
 
     private static final String ENTITY_NAME = "comment";
-        
+
     private final CommentService commentService;
 
     public CommentResource(CommentService commentService) {
@@ -122,6 +122,20 @@ public class CommentResource {
         log.debug("REST request to delete Comment : {}", id);
         commentService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * GET  /comments/post/:id : get the "id" posts' all comments.
+     *
+     * @param id the id of the post to retrieve comments
+     * @return the ResponseEntity with status 200 (OK) and with body the List<Comment>, or with status 404 (Not Found)
+     */
+    @GetMapping("/comments/post/{id}")
+    @Timed
+    public ResponseEntity<List<Comment>> getCommentForPost(@PathVariable String id) {
+        log.debug("REST request to get Comments for module : {}", id);
+        List<Comment> comments = commentService.findForComment(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(comments));
     }
 
 }
