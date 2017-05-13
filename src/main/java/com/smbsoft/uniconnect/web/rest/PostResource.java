@@ -2,6 +2,8 @@ package com.smbsoft.uniconnect.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.smbsoft.uniconnect.domain.Post;
+import com.smbsoft.uniconnect.security.AuthoritiesConstants;
+import com.smbsoft.uniconnect.security.SecurityUtils;
 import com.smbsoft.uniconnect.service.PostService;
 import com.smbsoft.uniconnect.web.rest.util.HeaderUtil;
 import com.smbsoft.uniconnect.web.rest.util.PaginationUtil;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -149,8 +152,16 @@ public class PostResource {
     @Timed
     public ResponseEntity<Void> deletePost(@PathVariable String id) {
         log.debug("REST request to delete Post : {}", id);
-        postService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+
+        // Should be either a admin or the creator
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN) ||
+            SecurityUtils.getCurrentUserLogin().equals(postService.findOne(id).getOwnerLogin())){
+            postService.delete(id);
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        }else{
+            // Otherwise cannot delete, so bad request
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**

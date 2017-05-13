@@ -1,7 +1,10 @@
 package com.smbsoft.uniconnect.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.smbsoft.uniconnect.domain.Authority;
 import com.smbsoft.uniconnect.domain.ModulePage;
+import com.smbsoft.uniconnect.security.AuthoritiesConstants;
+import com.smbsoft.uniconnect.security.SecurityUtils;
 import com.smbsoft.uniconnect.service.ModulePageService;
 import com.smbsoft.uniconnect.web.rest.util.HeaderUtil;
 import com.smbsoft.uniconnect.web.rest.util.PaginationUtil;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Security;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +36,7 @@ public class ModulePageResource {
     private final Logger log = LoggerFactory.getLogger(ModulePageResource.class);
 
     private static final String ENTITY_NAME = "modulePage";
-        
+
     private final ModulePageService modulePageService;
 
     public ModulePageResource(ModulePageService modulePageService) {
@@ -120,6 +124,12 @@ public class ModulePageResource {
     @Timed
     public ResponseEntity<Void> deleteModulePage(@PathVariable String id) {
         log.debug("REST request to delete ModulePage : {}", id);
+
+        // Only admin can do this, check privileges
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)){
+            return ResponseEntity.badRequest().build();
+        }
+
         modulePageService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }

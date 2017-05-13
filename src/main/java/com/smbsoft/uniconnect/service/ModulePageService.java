@@ -8,7 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service Implementation for managing ModulePage.
@@ -17,11 +19,14 @@ import java.util.List;
 public class ModulePageService {
 
     private final Logger log = LoggerFactory.getLogger(ModulePageService.class);
-    
+
     private final ModulePageRepository modulePageRepository;
 
-    public ModulePageService(ModulePageRepository modulePageRepository) {
+    private final PostService postService;
+
+    public ModulePageService(ModulePageRepository modulePageRepository, PostService postService) {
         this.modulePageRepository = modulePageRepository;
+        this.postService = postService;
     }
 
     /**
@@ -38,7 +43,7 @@ public class ModulePageService {
 
     /**
      *  Get all the modulePages.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
@@ -67,6 +72,20 @@ public class ModulePageService {
      */
     public void delete(String id) {
         log.debug("Request to delete ModulePage : {}", id);
+
+        // First delete all the posts inside this module page
+        ModulePage modulePage = modulePageRepository.findOne(id);
+
+        Optional<List<String>> postsOptional = Optional.ofNullable(modulePage.getPosts());
+
+        if(postsOptional.isPresent()){
+            // Delete all the posts related
+            for(String post : postsOptional.get()){
+                postService.delete(post);
+            }
+        }
+
+        // Now delete the modula page
         modulePageRepository.delete(id);
     }
 }

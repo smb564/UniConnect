@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.security.Security;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,11 +31,14 @@ public class PostService {
 
     private final PostRepository postRepository;
 
+    private final CommentService commentService;
+
     @Autowired
     private ModulePageService modulePageService;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, CommentService commentService) {
         this.postRepository = postRepository;
+        this.commentService = commentService;
     }
 
     /**
@@ -116,6 +120,19 @@ public class PostService {
      */
     public void delete(String id) {
         log.debug("Request to delete Post : {}", id);
+
+        // delete all the comments related to this post
+        Post post = postRepository.findOne(id);
+        Optional<List<String>> commentsOptional = Optional.ofNullable(post.getComments());
+
+        // Delete all if present
+        if(commentsOptional.isPresent()){
+            for(String comment : commentsOptional.get()){
+                commentService.delete(comment);
+            }
+        }
+
+        // Now delete the post
         postRepository.delete(id);
     }
 
@@ -134,11 +151,13 @@ public class PostService {
     }
 
     public Post upvotePost(String postId, String userLogin){
+        log.debug("Enetered into upvote method");
         Post post = postRepository.findOne(postId);
 
         Optional<List<String>> voteUserOptional = Optional.ofNullable(post.getVoteUsers());
 
         if (!voteUserOptional.isPresent()){
+            log.debug("Vote User List not exist, so first time up vote");
             post.setVoteUsers(new ArrayList<>());
             post.getVoteUsers().add(userLogin);
             post.incrementVotes();
@@ -149,6 +168,7 @@ public class PostService {
 
         while(iter.hasNext()){
             if (userLogin.equals(iter.next())){
+                log.debug("Already voted user, remove the vote");
                 // Already voted user
                 // decrement votes and remove userLogin from the vote list
                 post.decrementVotes();
@@ -158,6 +178,7 @@ public class PostService {
         }
 
         // If nothing returned, the user should be incrementing votes
+        log.debug("New vote from a new user, upvote");
         post.incrementVotes();
         post.getVoteUsers().add(userLogin);
 
