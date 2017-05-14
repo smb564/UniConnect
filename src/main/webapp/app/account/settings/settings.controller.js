@@ -5,9 +5,9 @@
         .module('uniConnectApp')
         .controller('SettingsController', SettingsController);
 
-    SettingsController.$inject = ['$scope', 'Principal', 'Auth', 'StudentUser', 'CompanyUser', 'INTEREST_FIELDS'];
+    SettingsController.$inject = ['$scope', 'Principal', 'Auth', 'StudentUser', 'CompanyUser', 'INTEREST_FIELDS', 'DEPARTMENTS'];
 
-    function SettingsController ($scope, Principal, Auth, StudentUser, CompanyUser, INTEREST_FIELDS) {
+    function SettingsController ($scope, Principal, Auth, StudentUser, CompanyUser, INTEREST_FIELDS, DEPARTMENTS) {
         var vm = this;
 
         // Getting the user type
@@ -29,6 +29,7 @@
 
         // Interests should be one of the following (Loaded from constants)
         vm.interests = INTEREST_FIELDS;
+        vm.departments = DEPARTMENTS;
 
         vm.error = null;
         vm.save = save;
@@ -52,7 +53,6 @@
         });
 
         function onCompanyUserLoadSuccess(data){
-            console.log(data);
             vm.companyUser.company = data.company;
             vm.companyUser.type = data.type;
         }
@@ -62,6 +62,7 @@
             vm.studentUser.interests = data.interests;
             vm.studentUser.graduateYear = data.graduateYear;
             vm.studentUser.graduate = data.graduate;
+            vm.studentUser.department = data.department;
         }
 
         function onError(err){

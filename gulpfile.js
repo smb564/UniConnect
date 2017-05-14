@@ -96,7 +96,12 @@ gulp.task('ngconstant:dev', function () {
         name: 'uniConnectApp',
         constants: {
             VERSION: util.parseVersion(),
-            DEBUG_INFO_ENABLED: true
+            DEBUG_INFO_ENABLED: true,
+            INTEREST_FIELDS: ['Science', 'Engineering', 'Planes', 'Mathematics','Programming',
+            'Winodows', 'Education', 'Health', 'Fitness'],
+            DEPARTMENTS: ['Computer Science and Engineering', 'Electronic and Telecommunication',
+            'Biomedical Engineering', 'Chemical Engineering', 'Electrical Engineering',
+            'Civil Engineering', 'Materials Engineering']
         },
         template: config.constantTemplate,
         stream: true

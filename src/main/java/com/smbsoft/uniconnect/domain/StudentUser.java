@@ -43,6 +43,22 @@ public class StudentUser implements Serializable {
     @Field("user_id")
     private String userId;
 
+    @Field("department")
+    private String department;
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public StudentUser department(String department){
+        this.department = department;
+        return this;
+    }
+
     public String getUserId() {
         return userId;
     }
