@@ -16,6 +16,7 @@ import javax.swing.text.html.Option;
 import java.security.Security;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -113,6 +114,26 @@ public class CommentService {
     public void delete(String id) {
         log.debug("Request to delete Comment : {}", id);
         commentRepository.delete(id);
+    }
+
+    public void deleteForPost(String id, String postId){
+        Post post = postService.findOne(postId);
+
+        Iterator<String> iter = post.getComments().iterator();
+
+        while(iter.hasNext()){
+            if (iter.next().equals(id)){
+                iter.remove();
+                break;
+            }
+        }
+
+        // Save the post
+        postService.save(post);
+
+        // Delete the comment now
+        delete(id);
+
     }
 
     /**

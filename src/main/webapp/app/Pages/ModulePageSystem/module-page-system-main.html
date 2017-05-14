@@ -15,6 +15,9 @@
                         <P>{{module.description}}</P>
                     </div>
                     <div class="col-md-2 pull-right">
+                        <button ng-show="vm.isAdmin" ng-click="vm.deletePage(module.id)" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         <p class="">{{module.posts.length || 0}} posts</p>
                         <button type="button" class="btn btn-info btn-sm" ui-sref="module-thread({id : module.id})">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -24,9 +27,8 @@
                     </div>
                 </div>
             </div>
+
+
         </li>
     </ul>
-
-    <!--<button type="button" ui-sref="post.newmodule" class="btn btn-default">Test</button>-->
-
 </div>

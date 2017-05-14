@@ -155,6 +155,8 @@ public class ForumService {
             }
         }
 
+        save(forum);
+
         postService.delete(postId);
     }
 

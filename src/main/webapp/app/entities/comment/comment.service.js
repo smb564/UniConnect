@@ -42,6 +42,10 @@
                 method : 'GET',
                 isArray : true,
                 url : 'api/comments/post/:id'
+            },
+            'deleteForPost' : {
+                url : 'api/comments/:commentId/post/:postId',
+                method : "DELETE"
             }
         });
     }

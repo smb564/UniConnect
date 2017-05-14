@@ -18,6 +18,9 @@
                             <p ng-bind-html="vm.formatString(comment.text)"></p>
                         </div>
                         <div class="col-md-2">
+                            <button ng-show="vm.isAdmin || vm.account.login === comment.user" ng-click="vm.deleteComment(comment.id)" type="button" class="close" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                             <p><b>{{comment.date}}</b></p>
                             <p><b>By <u>{{comment.user}}</u></b></p>
                         </div>

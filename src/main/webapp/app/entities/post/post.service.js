@@ -61,6 +61,14 @@
             'upVote' : {
                 url : 'api/posts/:postId/:userLogin',
                 method : "GET"
+            },
+            'deleteForModule' : {
+                url : 'api/posts/:postId/modules/:moduleId',
+                method : "DELETE"
+            },
+            'deleteForForum' : {
+                url : 'api/posts/:postId/forum/:forumId',
+                method : "DELETE"
             }
         });
     }

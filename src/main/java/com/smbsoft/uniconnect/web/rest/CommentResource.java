@@ -140,4 +140,19 @@ public class CommentResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(comments));
     }
 
+    /**
+     * DELETE  /comments/:id/post/:postId : delete the "id" comment of the postId post
+     *
+     * @param id the id of the comment to delete
+     * @param postId the id of the post the comment belongs
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/comments/{id}/post/{postId}")
+    @Timed
+    public ResponseEntity<Void> deleteCommentOfPost(@PathVariable String id, @PathVariable String postId) {
+        log.debug("REST request to delete Comment for post: {}", id);
+        commentService.deleteForPost(id, postId);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
 }

@@ -22,15 +22,26 @@
         // To up vote posts
         vm.upVote = upVote;
 
+        // To delete posts
+        vm.deletePost = deletePost;
+
         vm.modulePage = entity;
         vm.post = {};
         vm.posts = [];
         vm.addingPost = false;
+        vm.isAdmin = false;
 
         loadPosts();
 
         Principal.identity().then(function(account) {
             vm.account = account;
+
+            for(var i=0; i < vm.account.authorities.length; i++){
+                if ("ROLE_ADMIN" == vm.account.authorities[i]){
+                    vm.isAdmin = true;
+                    break;
+                }
+            }
         });
 
         // Getting all the posts
@@ -74,6 +85,12 @@
 
         function upVote(postId){
             Post.upVote({postId : postId, userLogin : vm.account.login}, loadPosts);
+        }
+
+        function deletePost(postId){
+            if (confirm("Do you want to delete the post?")){
+                Post.deleteForModule({postId : postId, moduleId : vm.modulePage.id}, loadPosts);
+            }
         }
     }
 

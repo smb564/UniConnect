@@ -155,6 +155,8 @@ public class PostService {
             }
         }
 
+        modulePageService.save(modulePage);
+
         // Now delete the post
         delete(id);
     }

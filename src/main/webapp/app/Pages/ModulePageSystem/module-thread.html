@@ -81,7 +81,11 @@
                         <P ng-bind-html="vm.formatString(post.description)"></P>
                     </div>
                     <div class="col-md-2 pull-right">
+                        <button ng-show="vm.isAdmin || vm.account.login === post.ownerLogin" ng-click="vm.deletePost(post.id)" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         <p><b>Votes : {{post.votes}}</b></p>
+                        <p>By <u>{{post.ownerLogin}}</u></p>
                         <p>Date : {{post.date}}</p>
                         <p class="">{{post.comments.length || 0}} comments</p>
                         <button type="button" class="btn btn-info btn-sm" ui-sref="module-comments({postId : post.id})">
